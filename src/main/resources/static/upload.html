@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+</head>
+<body>
+    <h1>Excel文件上传</h1>
+    <form id="form1" method="post" action="localhost:8008/upload/templateFile">
+        <input type="file" id="up" value="上传文件">
+        <input type="button" value="提交" onclick="upload()">
+    </form>
+</body>
+
+<script>
+    function upload(){
+        document.getElementById("form1")
+        form[0].submit();
+    }
+</script>
+
+</html>
