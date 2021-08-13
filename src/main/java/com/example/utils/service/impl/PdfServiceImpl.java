@@ -1,11 +1,15 @@
 package com.example.utils.service.impl;
 
+import cn.hutool.core.codec.Base64Decoder;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.itextpdf.text.pdf.draw.LineSeparator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import java.io.FileInputStream;
 
 /**
  * @Author: Cc
@@ -14,6 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PdfServiceImpl {
 
+    private static String IMAGE_PATH = "C:\\Users\\lenovo\\Desktop\\assets\\1526434145635.png";
+
     // 定义全局的字体静态变量
     private static Font titlefont;
     private static Font headfont;
@@ -21,6 +27,7 @@ public class PdfServiceImpl {
     private static Font textfont;
     // 最大宽度
     private static int maxWidth = 520;
+
     // 静态代码块
     static {
         try {
@@ -51,36 +58,41 @@ public class PdfServiceImpl {
                 .append("手，前来办理标准仓单作为保证金有关事项，用于履行该会员在交易所的保证金和相关债务。与本授权书相应的协议编号授权会员代为填写。请予以办理为盼！");
         Paragraph textParagraph2 = new Paragraph(sb2.toString(), textfont);
         setFormat(textParagraph2);
-        Paragraph textParagraph3 = new Paragraph("备注：仓库 xxx 数量(手) xxx",textfont);
+        Paragraph textParagraph3 = new Paragraph("备注：仓库 xxx 数量(手) xxx", textfont);
         setFormat(textParagraph3);
-        Paragraph textParagraph4 = new Paragraph("声明：本人(本单位)已仔细阅读《大连商品交易所结算管理办法》有关规定，了解并愿意承担本人(本单位)的相关责任",textfont);
+        Paragraph textParagraph4 = new Paragraph("声明：本人(本单位)已仔细阅读《大连商品交易所结算管理办法》有关规定，了解并愿意承担本人(本单位)的相关责任", textfont);
         setFormat(textParagraph4);
-        Paragraph textParagraph5 = new Paragraph("单   位(公章)",textfont);
+        Paragraph textParagraph5 = new Paragraph("单   位(公章)", textfont);
         setFormat(textParagraph5);
-        Paragraph textParagraph6 = new Paragraph("法定代表人(签字)",textfont);
+        Paragraph textParagraph6 = new Paragraph("法定代表人(签字)", textfont);
         setFormat(textParagraph6);
-        Paragraph textParagraph7 = new Paragraph("年  月  日",textfont);
+        Paragraph textParagraph7 = new Paragraph("年  月  日", textfont);
         setFormat(textParagraph7);
 
         // 点线
         Paragraph lineParagraph = new Paragraph();
         lineParagraph.add(new Chunk(new DottedLineSeparator()));
 
-        Paragraph textParagraph8 = new Paragraph("以下为会员填写：",textfont);
+        Paragraph textParagraph8 = new Paragraph("以下为会员填写：", textfont);
         setFormat(textParagraph8);
-        Paragraph textParagraph9 = new Paragraph("此授权书作为《大连商品交易所标准仓单作为保证金协议书》（协议编号：xxxxxx）授权。",textfont);
+        Paragraph textParagraph9 = new Paragraph("此授权书作为《大连商品交易所标准仓单作为保证金协议书》（协议编号：xxxxxx）授权。", textfont);
         setFormat(textParagraph9);
-        Paragraph textParagraph10 = new Paragraph("会员经办人签章：",textfont);
+        Paragraph textParagraph10 = new Paragraph("会员经办人签章：", textfont);
         setFormat(textParagraph10);
-        Paragraph textParagraph11 = new Paragraph("年  月  日",textfont);
+        Paragraph textParagraph11 = new Paragraph("年  月  日", textfont);
         setFormat(textParagraph11);
 
+        //获取base64流
+        String imageBase64 = getImageBase64();
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] decodeBytes = decoder.decodeBuffer(imageBase64);
+
         // 添加图片
-        Image image = Image.getInstance("C:\\Users\\lenovo\\Desktop\\word-seal.jpg");
+        Image image = Image.getInstance(decodeBytes);
         // 图片浮在文字上方
         image.setAlignment(Image.UNDERLYING);
         // 以左上角为中心设置x,y轴坐标，确定图片位置
-        image.setAbsolutePosition(400,500);
+        image.setAbsolutePosition(400, 500);
         // 依照比例缩放
         image.scalePercent(25);
 
@@ -100,7 +112,7 @@ public class PdfServiceImpl {
         document.add(image);
     }
 
-    public void setFormat(Paragraph paragraph){
+    public void setFormat(Paragraph paragraph) {
         paragraph.setAlignment(1);
         paragraph.setIndentationLeft(12);
         paragraph.setIndentationRight(12);
@@ -108,5 +120,16 @@ public class PdfServiceImpl {
         paragraph.setLeading(20f);
         paragraph.setSpacingBefore(5f);
         paragraph.setSpacingAfter(10f);
+    }
+
+    public static String getImageBase64() throws Exception {
+        BASE64Encoder encoder = new BASE64Encoder();
+
+        FileInputStream fin = new FileInputStream(IMAGE_PATH);
+        byte[] bytes = new byte[fin.available()];
+        fin.read(bytes);
+        String base64 = encoder.encode(bytes);
+        System.out.println(base64);
+        return base64;
     }
 }

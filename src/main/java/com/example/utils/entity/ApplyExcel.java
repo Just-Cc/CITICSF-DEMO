@@ -1,10 +1,13 @@
 package com.example.utils.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author: Cc
  * @Date: 2021/5/21 13:41
  */
-public class ApplyExcel {
+public class ApplyExcel implements Serializable {
+
     //仓单号
     private String receiptNumber;
     //转让数量(张)
