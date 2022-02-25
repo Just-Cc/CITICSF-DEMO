@@ -1,16 +1,20 @@
 package com.example.utils;
 
 
+import com.example.utils.entity.TestDTO;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 /**
  * @Author: Cc
  * @Date: 2021/6/3 15:38
  */
+
 public class Test {
 
     public static void main(String[] args) {
-        lambdaTest();
-        //stringTest();
+        System.out.println(LocalDateTime.now().toString());
+
     }
 
     public static void lambdaTest(){

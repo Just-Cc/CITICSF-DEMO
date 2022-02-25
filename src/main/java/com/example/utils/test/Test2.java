@@ -1,9 +1,10 @@
 package com.example.utils.test;
 
-import com.example.utils.entity.ApplyExcel;
+import com.citicsf.common.minio.MinioException;
+import com.citicsf.common.minio.MinioTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,11 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("testt")
 public class Test2 {
+    @Autowired
+    private MinioTemplate minioTemplate;
+
+    String bucket = "obs-attachments";
 
     @GetMapping("ggg")
-    public ApplyExcel ggg(){
-        ApplyExcel applyExcel = new ApplyExcel();
-        applyExcel.setPrice("123123");
-        return applyExcel;
+    public void ggg() throws MinioException {
+        String path = minioTemplate.getPresignedObjectUrl(bucket, "png", 60);
+        System.out.println(path);
+    }
+
+
+    @GetMapping("ttt")
+    public void ttt() {
+
+
     }
 }
